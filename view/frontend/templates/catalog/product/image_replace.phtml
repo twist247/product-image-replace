@@ -1,0 +1,39 @@
+<script type="text/javascript">
+    require([
+        'jquery',
+        'mage/storage'
+    ], function ($, storage) {
+        $('[data-gallery-role=gallery-placeholder]').bind('gallery:loaded', function () {
+            var galleryApi = $(this).data('gallery');
+
+            function replaceImage(newImage) {
+                var mainImageIndex = null,
+                    mainImageData = null;
+
+                galleryApi.returnCurrentImages().forEach(function (image, index) {
+                    if (image.isMain === true) {
+                        mainImageData = image;
+                        mainImageIndex = index;
+                    }
+                });
+
+
+                if (mainImageData !== null) {
+                    mainImageData.img = newImage;
+                    mainImageData.full = newImage;
+                    mainImageData.thumb = newImage;
+
+                    galleryApi.updateDataByIndex(mainImageIndex, mainImageData);
+                }
+            }
+
+            storage.get(
+                'rest/V1/image-replace/get-new-image'
+            ).done(function (response) {
+                if (response.url) {
+                    replaceImage(response.url);
+                }
+            });
+        });
+    });
+</script>
