@@ -1,0 +1,19 @@
+<script type="text/javascript">
+    require([
+        'jquery',
+        'mage/storage'
+    ], function ($, storage) {
+        $(document).ready(function () {
+            $('.product-items .product-item img.product-image-photo').each(function () {
+                var imageEl = $(this);
+                storage.get(
+                    '/rest/V1/image-replace/get-new-image'
+                ).done(function (response) {
+                    if (response.url) {
+                        imageEl.attr('src', response.url);
+                    }
+                });
+            });
+        });
+    });
+</script>
